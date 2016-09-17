@@ -50,7 +50,7 @@
         service.moveToBought = function (index) {
             if (0 <= index && index < itemstobuy.length) {
                 var movedItemsList = itemstobuy.splice(index, 1);
-                console.table(movedItemsList);
+                //console.table(movedItemsList);
                 itemsbought.push(movedItemsList[0]);
             }
             else {
