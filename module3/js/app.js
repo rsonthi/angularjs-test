@@ -36,18 +36,11 @@
                 list.errormessage = "Nothing found";
                 return;
             } 
+            
             var promise = MenuSearchService.getMatchedMenuItems(list.searchterm);
             
             promise.then(function(result){
-                // Go through the menu items and filter out
-                // those that do not match
-                var menuitems = result.data.menu_items;
-                for(var i =0; i < menuitems.length; i++){
-                    var item = menuitems[i];
-                    if(item.description.toLowerCase().includes(list.searchterm.toLowerCase())){
-                        list.found.push(item);
-                    }
-                }
+                list.found = result;
                 if(list.found.length===0){
                     list.errormessage = "Nothing found";
                 }
@@ -66,8 +59,19 @@
         var service = this;
 
         service.getMatchedMenuItems = function (searchterm){
-            var promise = $http.get(ApiBasePath + "/menu_items.json");
-            return promise;
+            return $http.get(ApiBasePath + "/menu_items.json").then(function(result){
+                // Go through the menu items and filter out
+                // those that do not match
+                var menuitems = result.data.menu_items;
+                var founditems = [];
+                for(var i =0; i < menuitems.length; i++){
+                    var item = menuitems[i];
+                    if(item.description.toLowerCase().includes(searchterm.toLowerCase())){
+                        founditems.push(item);
+                    }
+                }
+                return founditems;
+            });
         };
 
     }
